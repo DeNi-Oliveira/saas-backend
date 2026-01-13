@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: saas-db-compose
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata_saas:/var/lib/postgresql
+    ports:
+      - "5432:5432"
+    networks:
+      - saas-network
+
+  backend:
+    build: ./backend/SaasApi
+    container_name: saas-backend
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - saas-network
+
+  web:
+    image: nginx:latest
+    container_name: saas-proxy-compose
+    ports:
+      - "8080:80"
+    networks:
+      - saas-network
+
+volumes:
+  pgdata_saas:
+
+networks:
+  saas-network:
