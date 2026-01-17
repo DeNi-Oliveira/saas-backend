@@ -11,4 +11,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
 EXPOSE 8080
+
+USER root
+RUN apt-get update && apt-get install -y curl
+
 ENTRYPOINT ["dotnet", "SaasApi.dll"]
