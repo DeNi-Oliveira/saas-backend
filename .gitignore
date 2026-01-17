@@ -485,3 +485,14 @@ $RECYCLE.BIN/
 
 # Ignorar arquivos de ambiente com senhas
 .env
+
+# --- Segurança do Projeto SaaS ---
+
+# Ignora o arquivo com as senhas reais (Neon/Gemini)
+appsettings.Development.json
+
+# (Opcional) Caso você use um arquivo de segredos locais do .NET
+secrets.json
+
+# (Opcional) O .env já estava lá em cima, mas reforçando:
+.env
