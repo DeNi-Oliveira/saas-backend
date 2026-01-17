@@ -1,7 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using SaasApi.Data;
+using Microsoft.SemanticKernel;
 
 var builder = WebApplication.CreateBuilder(args);
+var geminiKey = builder.Configuration["Gemini:ApiKey"];
+var geminiModel = builder.Configuration["Gemini:ModelId"];
+
+if (!string.IsNullOrEmpty(geminiKey))
+{
+    builder.Services.AddKernel()
+        .AddGoogleAIGeminiChatCompletion(
+            modelId: geminiModel!,
+            apiKey: geminiKey);
+}
 
 // Configuração do Banco de Dados
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -17,7 +28,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("PermitirBubble",
         policy =>
         {
-            policy.WithOrigins("https://seu-app-bubble.bubbleapps.io") // Troque pelo link do seu Bubble
+            policy.WithOrigins("https://seu-app-bubble.bubbleapps.io") // Trocar pelo link do bubble
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
