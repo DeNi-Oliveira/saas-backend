@@ -19,7 +19,7 @@ public class AiController : ControllerBase
     {
         try
         {
-            // O comando mágico: InvokePromptAsync manda o texto pro Gemini e traz a resposta
+            // InvokePromptAsync manda o texto pro Gemini e traz a resposta
             var resposta = await _kernel.InvokePromptAsync(texto);
             
             return Ok(new { 

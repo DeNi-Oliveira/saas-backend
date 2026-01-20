@@ -1,8 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using SaasApi.Data;
 using Microsoft.SemanticKernel;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, configuration) =>
+    configuration
+        .WriteTo.Console());
+
 var geminiKey = builder.Configuration["Gemini:ApiKey"];
 var geminiModel = builder.Configuration["Gemini:ModelId"];
 
@@ -35,6 +40,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
