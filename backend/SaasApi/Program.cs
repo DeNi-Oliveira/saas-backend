@@ -4,6 +4,8 @@ using Microsoft.SemanticKernel;
 using Serilog;
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
@@ -42,6 +44,25 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    // Em vez de um limitador simples, criamos uma POLÍTICA
+    options.AddPolicy("fixed", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            // o IP de quem está chamando
+            // Se não tiver IP (localhost as vezes esconde), usa "anonimo"
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonimo", 
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromSeconds(10),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+});
+
 var app = builder.Build();
 app.UseSerilogRequestLogging();
 
@@ -52,8 +73,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("PermitirBubble");
+app.UseRateLimiter();
 app.UseAuthorization();
-app.MapControllers();
+app.MapControllers().RequireRateLimiting("fixed"); // Ou colocar [EnableRateLimiting("fixed")] em cima de cada Controller
 app.MapHealthChecks("/health", new HealthCheckOptions
 {
     // Isso faz o health check responder um JSON bonito em vez de só texto
@@ -74,6 +96,6 @@ app.MapHealthChecks("/health", new HealthCheckOptions
         };
         await JsonSerializer.SerializeAsync(context.Response.Body, response);
     }
-});
-
+})
+.RequireRateLimiting("fixed");
 app.Run();
