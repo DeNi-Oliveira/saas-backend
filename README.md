@@ -103,7 +103,7 @@ The focus of this lab is the implementation of critical non-functional requireme
 
 ```bash
 # Clone the repository
-git clone [https://github.com/DeNi-Oliveira/projeto-saas.git](https://github.com/DeNi-Oliveira/projeto-saas.git)
+git clone https://github.com/DeNi-Oliveira/saas-backend.git
 
 # Enter the backend directory
 cd backend/SaasApi
