@@ -24,6 +24,15 @@ Você pode testar os endpoints e a documentação via Swagger UI:
 
 > ⚠️ **Nota:** Como está hospedado no plano gratuito, a aplicação entra em modo de suspensão por inatividade. A primeira requisição pode levar cerca de **50 segundos** para acordar o servidor (Cold Start).
 
+### 🧪 O que testar agora? (Current Experiments)
+
+O laboratório conta com um **Classificador Financeiro Inteligente**.
+No Swagger, tente o endpoint `POST /api/Ai/classify-expenses` com um texto informal:
+
+> **Input (Texto):** "Almocei com o cliente na churrascaria gastando 150 reais e peguei um uber de 30 pra voltar."
+
+> **Output (JSON Gerado):** O sistema identifica categorias, separa valores e gera tags automaticamente.
+
 ### 🚀 Funcionalidades de Engenharia (Platform Engineering)
 
 O foco deste laboratório é a implementação de requisitos não-funcionais críticos:
@@ -41,9 +50,10 @@ O foco deste laboratório é a implementação de requisitos não-funcionais cr�
 * **Segurança & Performance:**
     * **Rate Limiting Avançado:** Proteção contra ataques de força bruta, DDoS e loops acidentais.
     * Política inteligente baseada em **IP** com `QueueLimit = 0` (rejeição imediata sem fila de espera).
-* **IA Integration:**
-    * Implementação do **Semantic Kernel** para orquestração de IA.
-    * Integração com Google Gemini Flash para processamento de linguagem natural.
+* **AI & Data Engineering:**
+    * **Semantic Kernel Orchestration:** Integração nativa com LLMs (Gemini/OpenAI).
+    * **Structured Outputs:** Conversão de linguagem natural não-estruturada em objetos JSON tipados e validados (ex: *Expense Classifier*).
+    * **System Prompt Engineering:** Uso de instruções de sistema para garantir consistência de dados para o Frontend.
 
 ### 🛠️ Tech Stack
 * **Core:** .NET 8 (C#)
@@ -69,6 +79,15 @@ You can test endpoints and documentation via Swagger UI:
 
 > ⚠️ **Note:** Hosted on the free tier, the application sleeps after inactivity. The first request may take about **50 seconds** to wake up the server (Cold Start).
 
+### 🧪 What to test now? (Current Experiments)
+
+The lab features an **Intelligent Expense Classifier**.
+On Swagger, try the `POST /api/Ai/classify-expenses` endpoint with informal text:
+
+> **Input (Text):** "I had lunch with the client at the steakhouse spending 150 reais and took an uber of 30 to get back."
+
+> **Output (Generated JSON):** The system identifies categories, separates values, and generates tags automatically.
+
 ### 🚀 Engineering Features (Platform Engineering)
 
 The focus of this lab is the implementation of critical non-functional requirements:
@@ -86,9 +105,10 @@ The focus of this lab is the implementation of critical non-functional requireme
 * **Security & Performance:**
     * **Advanced Rate Limiting:** Protection against brute-force attacks, DDoS, and accidental loops.
     * Intelligent **IP-based** policy with `QueueLimit = 0` (immediate rejection without queuing).
-* **AI Integration:**
-    * **Semantic Kernel** implementation for AI orchestration.
-    * Google Gemini Flash integration for natural language processing.
+* **AI & Data Engineering:**
+    * **Semantic Kernel Orchestration:** Native integration with LLMs (Gemini/OpenAI).
+    * **Structured Outputs:** Conversion of unstructured natural language into typed and validated JSON objects (e.g., *Expense Classifier*).
+    * **System Prompt Engineering:** Use of system instructions to ensure data consistency for the Frontend.
 
 ### 🛠️ Tech Stack
 * **Core:** .NET 8 (C#)
@@ -103,7 +123,7 @@ The focus of this lab is the implementation of critical non-functional requireme
 
 ```bash
 # Clone the repository
-git clone https://github.com/DeNi-Oliveira/saas-backend.git
+git clone [https://github.com/DeNi-Oliveira/saas-backend.git](https://github.com/DeNi-Oliveira/saas-backend.git)
 
 # Enter the backend directory
 cd backend/SaasApi
