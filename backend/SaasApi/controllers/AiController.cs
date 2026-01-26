@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SaasApi.Models;
 using SaasApi.Services; // Importar o Service
 
 namespace SaasApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class AiController : ControllerBase
