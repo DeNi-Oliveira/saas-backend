@@ -4,8 +4,9 @@ using Microsoft.SemanticKernel;
 using Serilog;
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, configuration) =>
@@ -63,7 +64,12 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
+builder.Services.AddScoped<SaasApi.Services.IExpenseService, SaasApi.Services.ExpenseService>();
+builder.Services.AddFluentValidationAutoValidation(); // Habilita validação automática
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Registra todos os validators do projeto
+
 var app = builder.Build();
+app.UseMiddleware<SaasApi.Middlewares.GlobalErrorHandlingMiddleware>();
 app.UseSerilogRequestLogging();
 
 // if (app.Environment.IsDevelopment())
