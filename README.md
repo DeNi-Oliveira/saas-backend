@@ -1,6 +1,6 @@
 # 🧪 SaaS Backend Laboratory & Platform Engineering
 
-![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?style=flat&logo=dotnet)
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
 ![Docker](https://img.shields.io/badge/Docker-Container-blue?style=flat&logo=docker)
 ![Postgres](https://img.shields.io/badge/PostgreSQL-Neon.tech-336791?style=flat&logo=postgresql)
 ![Status](https://img.shields.io/badge/Status-Live-success)
@@ -56,7 +56,7 @@ O foco deste laboratório é a implementação de requisitos não-funcionais cr�
     * **System Prompt Engineering:** Uso de instruções de sistema para garantir consistência de dados para o Frontend.
 
 ### 🛠️ Tech Stack
-* **Core:** .NET 8 (C#)
+* **Core:** .NET 10 (C#)
 * **Banco de Dados:** PostgreSQL (via Neon Tech)
 * **Containerização:** Docker & Docker Compose
 * **Cloud/Deploy:** Render

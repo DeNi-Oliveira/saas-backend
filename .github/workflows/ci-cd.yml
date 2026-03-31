@@ -1,0 +1,84 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─────────────────────────────────────────
+  # Job 1: Build + Testes
+  # ─────────────────────────────────────────
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restore dependências
+        run: dotnet restore projeto-saas.sln
+
+      - name: Build
+        run: dotnet build projeto-saas.sln --no-restore -c Release
+
+      - name: Testes com cobertura
+        run: |
+          dotnet test projeto-saas.sln \
+            --no-build \
+            -c Release \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./coverage
+
+      - name: Upload relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ./coverage
+
+  # ─────────────────────────────────────────
+  # Job 2: Validar Docker build
+  # Roda em PRs para garantir que a imagem builda
+  # ─────────────────────────────────────────
+  docker-build:
+    name: Docker Build (validação)
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build da imagem Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/SaasApi
+          file: ./backend/SaasApi/Dockerfile
+          push: false
+          tags: saas-backend:${{ github.sha }}
+
+  # ─────────────────────────────────────────
+  # Job 3: Deploy no Render
+  # Roda apenas no push para main
+  # ─────────────────────────────────────────
+  deploy:
+    name: Deploy → Render
+    runs-on: ubuntu-latest
+    needs: [build-and-test, docker-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Trigger deploy no Render
+        run: |
+          curl --silent --fail --show-error \
+            -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+      - name: Deploy iniciado
+        run: echo "Deploy disparado com sucesso. Acompanhe em https://dashboard.render.com"
